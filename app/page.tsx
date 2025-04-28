@@ -26,7 +26,7 @@ export default function HomePage() {
     link.click();
   };
   const handleSubmit = async (longUrl: string,doctor:string,clinic:string) => {
-    const res = await fetch("https://qr-generator-nine-tau.vercel.app/", {
+    const res = await fetch("https://qr-generator-nine-tau.vercel.app/api/shorten", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ longUrl,doctorName : doctor,clinicName  : clinic}),
