@@ -4,6 +4,7 @@ import Image from "next/image";
 import { QRCodeSVG } from "qrcode.react";
 import { useState, useEffect, useRef } from "react";
 import { toPng } from "html-to-image";
+import { Button } from "@/components/ui/button";
 
 const GOOGLE_SHEET_ID = "1-yWUzJyKXn-QybvrVk94aiMx_HUOCfulsgyELuuSpMM";
 
@@ -12,10 +13,9 @@ export default function HomePage() {
   const [data, setData] = useState<any[][]>([]);
   const [doctorName, setDoctorName] = useState("");
   const [clinicName, setClinicName] = useState("");
+  const [scale, setScale] = useState(800)
   const divRef = useRef<HTMLDivElement>(null);
- 
 
-  
 
   const handleDownload = async () => {
     if (!divRef.current) return;
@@ -60,6 +60,10 @@ export default function HomePage() {
     fetchSheet();
   }, []);
 
+  useEffect(()=>{
+    setScale(window.innerWidth)
+  },[scale])
+
   return (
     <main
       style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}
@@ -69,10 +73,10 @@ export default function HomePage() {
         <div className="relative h-full w-full">
           <div
             style={{ marginTop: "2rem" }}
-            className="flex items-center justify-center "
+            className="flex items-center flex-col justify-center "
           >
             <div
-              className="flex items-center relative justify-center w-[400px] h-[400px] md:w-[600px] md:h-[600px]"
+              className="flex items-center relative justify-center w-[300px] h-[300px] md:w-[600px] md:h-[600px]"
               ref={divRef}
             >
               <Image
@@ -82,17 +86,17 @@ export default function HomePage() {
                 objectFit="cover"
                 priority={true}
               />
-              <p className="top-14 absolute text-4xl font-semibold">
+              <p className="top-6 md:top-14 absolute md:text-4xl text-xl font-semibold">
                 {doctorName || "hello"}
               </p>
-              <p className="bottom-14 absolute text-4xl font-semibold">
+              <p className="bottom-6 md:bottom-14 absolute md:text-4xl text-xl font-semibold">
                 {clinicName || "hello"}
               </p>
               <div className="absolute">
                 <QRCodeSVG
                   value={shortUrl}
                   title={doctorName || "Title"}
-                  size={320}
+                  size={scale < 800 ? 160 : 320}
                   bgColor={"#ffffff"}
                   fgColor={"#000000"}
                   level={"H"}
@@ -100,35 +104,46 @@ export default function HomePage() {
                     src: "https://res.cloudinary.com/db9gdpyyv/image/upload/v1745587816/star_wzre3w.png",
                     x: undefined,
                     y: undefined,
-                    height: 70,
-                    width: 70,
-                    opacity: 1,
+                    height: scale < 800 ? 50 : 70,
+                    width: scale < 800 ? 50 : 70,
                     excavate: true,
                   }}
                 />
               </div>
             </div>
-            <div className="absolute bottom-15 flex flex-row gap-10">
-              <button
-                className="py-2 px-4 rounded-xl bg-red-500 text-white font-semibold cursor-pointer"
+            <div className="relative -bottom-5 flex flex-row gap-10">
+              <Button
+                className="py-2 px-4 rounded-xl bg-red-500 text-white font-semibold cursor-pointer hover:bg-red-700"
                 onClick={() => setShortId("")}
               >
                 Go back
-              </button>
-              <button
-                className="py-2 px-4 rounded-xl bg-green-500 text-white font-semibold cursor-pointer"
+              </Button>
+              <Button
+                className="py-2 px-4 rounded-xl bg-green-500 text-white font-semibold cursor-pointer hover:bg-green-700"
                 onClick={handleDownload}
               >
                 Download
-              </button>
+              </Button>
             </div>
           </div>
         </div>
       ) : (
-        <div>
-          <h2>Google Sheet Data</h2>
-          <button>Export as excel</button>
+        <div className="h-full w-full flex flex-col px-2">
+          <h2 className="text-center font-semibold text-xl pb-5">Google Sheet Data</h2>
           <table border={1} className="px-5">
+            <thead>
+              <tr>
+                <th className="border p-2">Sr No</th>
+                <th className="border p-2">Rsm Name</th>
+                <th className="border p-2">Dr.Name</th>
+                <th className="border p-2">Place</th>
+                <th className="border p-2">Mobile No.</th>
+                <th className="border p-2">Clinic Name</th>
+                <th className="border p-2">Google Page Link</th>
+                <th className="border p-2">Review Page Link</th>
+                <th className="border p-2">QR Button</th>
+              </tr>
+            </thead>
             <tbody>
               {data.map((row, rowIndex) => (
                 <tr key={rowIndex} className="border">
@@ -136,31 +151,31 @@ export default function HomePage() {
                     <>
                       <td
                         key={cellIndex}
-                        className={`border px-2 truncate ${
-                          cellIndex > 7 && "hidden"
+                        className={`border px-2 truncate text-center ${
+                          (cellIndex > 7 || cellIndex === 2 || cellIndex === 3) && "hidden"
                         }`}
                       >
                         {" "}
                         <p className="truncate">{cell}</p>
                       </td>
                       {cellIndex === 7 && (
-                        <td className="p-3">
+                        <td className="px-2 text-center">
                           <a href={row[9]} className="text-blue-500 truncate">
                             Clinic link
                           </a>
                         </td>
                       )}
                       {cellIndex === 8 && (
-                        <td className="p-2 border">
+                        <td className="px-2 border text-center">
                           <a className="text-blue-500 truncate" href={row[8]}>
                             Clinic review link
                           </a>
                         </td>
                       )}
                       {cellIndex === 9 && (
-                        <td className="p-2">
-                          <button
-                            className="rounded-lg bg-green-600 truncate px-3 py-1 cursor-pointer"
+                        <td className="p-2 text-center">
+                          <Button
+                            className="rounded-lg bg-green-600 truncate px-3 cursor-pointer hover:bg-green-800"
                             onClick={(e) => {
                               setDoctorName(row[4]),
                                 setClinicName(row[7]),
@@ -168,7 +183,7 @@ export default function HomePage() {
                             }}
                           >
                             generate QR Code
-                          </button>
+                          </Button>
                         </td>
                       )}
                     </>
