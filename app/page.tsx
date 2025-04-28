@@ -41,7 +41,7 @@ export default function HomePage() {
   };
 
   const origin = typeof window !== "undefined" ? window.location.origin : "";
-  const shortUrl = shortId ? `https://qr-generator-l5eniof7m-priyammagical-balloons-projects.vercel.app//api/${shortId}` : "";
+  const shortUrl = shortId ? `https://qr-generator-l5eniof7m-priyammagical-balloons-projects.vercel.app/api/${shortId}` : "";
   const qrUrl = shortId ? `/api/qr/${shortId}` : "";
 
   useEffect(() => {

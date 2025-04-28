@@ -23,6 +23,8 @@ export async function GET(req: NextRequest) {
         },
       },
     });
+    console.log("mapped long url",mapedLongUrl)
+    console.log(" long url",longUrl)
     return NextResponse.redirect(mapedLongUrl ?? longUrl!.longUrl);
   }
 
