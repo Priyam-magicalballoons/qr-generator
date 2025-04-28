@@ -26,7 +26,7 @@ export default function HomePage() {
     link.click();
   };
   const handleSubmit = async (longUrl: string,doctor:string,clinic:string) => {
-    const res = await fetch("https://qr-generator-l5eniof7m-priyammagical-balloons-projects.vercel.app/api/shorten", {
+    const res = await fetch("https://qr-generator-nine-tau.vercel.app/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ longUrl,doctorName : doctor,clinicName  : clinic}),
@@ -41,7 +41,7 @@ export default function HomePage() {
   };
 
   const origin = typeof window !== "undefined" ? window.location.origin : "";
-  const shortUrl = shortId ? `https://qr-generator-l5eniof7m-priyammagical-balloons-projects.vercel.app/api/${shortId}` : "";
+  const shortUrl = shortId ? `https://qr-generator-nine-tau.vercel.app/api/${shortId}` : "";
   const qrUrl = shortId ? `/api/qr/${shortId}` : "";
 
   useEffect(() => {
