@@ -81,7 +81,7 @@ const page = () => {
         </div>
       ) : (
         <div className="h-full w-full p-10 flex flex-col  items-center">
-            <div className="w-full py-5 justify-end flex">
+            <div className="w-full md:w-1/3 lg:w-1/2 py-5 justify-end flex">
                 <Button onClick={exportToExcel}>
                     Export to excel
                 </Button>
