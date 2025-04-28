@@ -26,7 +26,7 @@ export default function HomePage() {
     link.click();
   };
   const handleSubmit = async (longUrl: string,doctor:string,clinic:string) => {
-    const res = await fetch("/api/shorten", {
+    const res = await fetch("https://qr-generator-l5eniof7m-priyammagical-balloons-projects.vercel.app/api/shorten", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ longUrl,doctorName : doctor,clinicName  : clinic}),
