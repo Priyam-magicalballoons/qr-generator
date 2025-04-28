@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { QRCodeSVG } from "qrcode.react";
 import { useState, useEffect, useRef } from "react";
-import { toPng} from "html-to-image";
+import { toPng } from "html-to-image";
 
 const GOOGLE_SHEET_ID = "1-yWUzJyKXn-QybvrVk94aiMx_HUOCfulsgyELuuSpMM";
 
@@ -13,6 +13,7 @@ export default function HomePage() {
   const [doctorName, setDoctorName] = useState("");
   const [clinicName, setClinicName] = useState("");
   const divRef = useRef<HTMLDivElement>(null);
+
   const handleDownload = async () => {
     if (!divRef.current) return;
 
@@ -23,11 +24,12 @@ export default function HomePage() {
     link.href = dataUrl;
     link.click();
   };
-  const handleSubmit = async (longUrl: string,doctor:string,clinic:string) => {
-    const res = await fetch("https://qr-generator-nine-tau.vercel.app/api/shorten", {
+
+  const handleSubmit = async (longUrl: string, doctor: string, clinic: string) => {
+    const res = await fetch("/api/shorten", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ longUrl,doctorName : doctor,clinicName  : clinic}),
+      body: JSON.stringify({ longUrl, doctorName: doctor, clinicName: clinic }),
     });
 
     if (res.ok) {
@@ -37,10 +39,7 @@ export default function HomePage() {
       alert("Failed to shorten URL");
     }
   };
-
-  const origin = typeof window !== "undefined" ? window.location.origin : "";
   const shortUrl = shortId ? `https://qr-generator-nine-tau.vercel.app/api/${shortId}` : "";
-  const qrUrl = shortId ? `/api/qr/${shortId}` : "";
 
   useEffect(() => {
     const fetchSheet = async () => {
@@ -48,7 +47,7 @@ export default function HomePage() {
         `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/gviz/tq?tqx=out:json`
       );
       const text = await res.text();
-      const json = JSON.parse(text.substr(47).slice(0, -2)); // Google sends weird padding
+      const json = JSON.parse(text.substr(47).slice(0, -2));
       const rows = json.table.rows.map((row: any) =>
         row.c.map((cell: any) => (cell ? cell.v : ""))
       );
@@ -57,30 +56,6 @@ export default function HomePage() {
 
     fetchSheet();
   }, []);
-
-  // import { getUrl } from '@/lib/urlStore';
-// import QRCode from 'qrcode';
-// import { NextRequest, NextResponse } from 'next/server';
-
-// export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-//   const longUrl = getUrl(params.id);
-//   if (!longUrl) {
-//     return new NextResponse('Invalid QR ID', { status: 404 });
-//   }
-
-//   const qrUrl = `http://192.168.1.18:3000/api/${params.id}`;
-//   const qrDataUrl = await QRCode.toDataURL(qrUrl);
-//   const base64Data = qrDataUrl.split(',')[1];
-//   const imgBuffer = Buffer.from(base64Data, 'base64');
-
-//   return new NextResponse(imgBuffer, {
-//     headers: {
-//       'Content-Type': 'image/png',
-//       'Content-Length': imgBuffer.length.toString(),
-//     },
-//   });
-// }
-
 
   return (
     <main
@@ -100,8 +75,9 @@ export default function HomePage() {
               <Image
                 src={"/t.png"}
                 alt="template"
-                fill
-                className=""
+                layout="fill"
+                objectFit="cover"
+                priority={true}
               />
               <p className="top-14 absolute text-4xl font-semibold">
                 {doctorName || "hello"}
@@ -157,14 +133,26 @@ export default function HomePage() {
                       <td
                         key={cellIndex}
                         className={`border px-2 truncate ${
-                          cellIndex === 8 && "max-w-10"
-                        } ${cellIndex === 9 && "max-w-10"} ${
-                          cellIndex > 9 && "hidden"
+                          cellIndex > 7 && "hidden"
                         }`}
                       >
                         {" "}
-                        <a href={row[8]}>{row[8]}</a>
+                        <p className="truncate">{cell}</p>
                       </td>
+                      {cellIndex === 7 && (
+                        <td className="p-3">
+                          <a href={row[9]} className="text-blue-500 truncate">
+                            Clinic link
+                          </a>
+                        </td>
+                      )}
+                      {cellIndex === 8 && (
+                        <td className="p-2 border">
+                          <a className="text-blue-500 truncate" href={row[8]}>
+                            Clinic review link
+                          </a>
+                        </td>
+                      )}
                       {cellIndex === 9 && (
                         <td className="p-2">
                           <button
@@ -172,7 +160,7 @@ export default function HomePage() {
                             onClick={(e) => {
                               setDoctorName(row[4]),
                                 setClinicName(row[7]),
-                                handleSubmit(cell,row[4],row[7]);
+                                handleSubmit(row[8], row[4], row[7]);
                             }}
                           >
                             generate QR Code
