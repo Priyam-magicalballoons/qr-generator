@@ -13,6 +13,9 @@ export default function HomePage() {
   const [doctorName, setDoctorName] = useState("");
   const [clinicName, setClinicName] = useState("");
   const divRef = useRef<HTMLDivElement>(null);
+ 
+
+  
 
   const handleDownload = async () => {
     if (!divRef.current) return;
@@ -124,6 +127,7 @@ export default function HomePage() {
       ) : (
         <div>
           <h2>Google Sheet Data</h2>
+          <button>Export as excel</button>
           <table border={1} className="px-5">
             <tbody>
               {data.map((row, rowIndex) => (
