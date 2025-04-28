@@ -2,14 +2,12 @@
 
 import Image from "next/image";
 import { QRCodeSVG } from "qrcode.react";
-import { useState, FormEvent, useEffect, useRef } from "react";
-import { toPng, toSvg, toJpeg } from "html-to-image";
-import download from "downloadjs";
+import { useState, useEffect, useRef } from "react";
+import { toPng} from "html-to-image";
 
 const GOOGLE_SHEET_ID = "1-yWUzJyKXn-QybvrVk94aiMx_HUOCfulsgyELuuSpMM";
 
 export default function HomePage() {
-  // const [longUrl, setLongUrl] = useState('');
   const [shortId, setShortId] = useState<string | null>(null);
   const [data, setData] = useState<any[][]>([]);
   const [doctorName, setDoctorName] = useState("");
@@ -165,7 +163,7 @@ export default function HomePage() {
                         }`}
                       >
                         {" "}
-                        <a href={cell}>{cell}</a>
+                        <a href={row[8]}>{row[8]}</a>
                       </td>
                       {cellIndex === 9 && (
                         <td className="p-2">
