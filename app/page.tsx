@@ -76,7 +76,7 @@ export default function HomePage() {
             className="flex items-center flex-col justify-center "
           >
             <div
-              className="flex items-center relative justify-center w-[300px] h-[300px] md:w-[600px] md:h-[600px]"
+              className="flex items-center relative justify-center w-[300px] h-[300px] md:w-[700px] md:h-[700px]"
               ref={divRef}
             >
               <Image
@@ -86,17 +86,17 @@ export default function HomePage() {
                 objectFit="cover"
                 priority={true}
               />
-              <p className="top-6 md:top-11 absolute md:text-4xl text-xl font-semibold">
+              <p className="top-6 md:top-12 absolute md:text-4xl text-xl font-semibold">
                 {doctorName || "hello"}
               </p>
-              <p className="bottom-6 md:bottom-11 absolute md:text-4xl text-xl font-semibold">
+              <p className="bottom-6 md:bottom-12 absolute md:text-4xl text-xl font-semibold">
                 {clinicName || "hello"}
               </p>
               <div className="absolute">
                 <QRCodeSVG
                   value={shortUrl}
                   title={doctorName || "Title"}
-                  size={scale < 800 ? 160 : 350}
+                  size={scale < 800 ? 175 : 410}
                   bgColor={"#ffffff"}
                   fgColor={"#000000"}
                   level={"H"}
@@ -104,8 +104,8 @@ export default function HomePage() {
                     src: "/star.png",
                     x: undefined,
                     y: undefined,
-                    height: scale < 800 ? 50 : 70,
-                    width: scale < 800 ? 50 : 70,
+                    height: scale < 800 ? 40 : 70,
+                    width: scale < 800 ? 40 : 70,
                     excavate: true,
                   }}
                 />
