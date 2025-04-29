@@ -4,10 +4,8 @@ import prisma from "@/lib/prisma";
 
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
-  console.log(url)
   const pathSegments = url.pathname.split("/");
   const id = pathSegments[pathSegments.length - 1];
-  console.log(id)
   const longUrl = await prisma.shortener.findFirst({
     where: {
       shortUrl: id,

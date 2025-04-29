@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { QRCodeSVG } from "qrcode.react";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { toPng } from "html-to-image";
 import { Button } from "@/components/ui/button";
 
@@ -15,7 +15,6 @@ export default function HomePage() {
   const [clinicName, setClinicName] = useState("");
   const [scale, setScale] = useState(800)
   const divRef = useRef<HTMLDivElement>(null);
-
 
   const handleDownload = async () => {
     if (!divRef.current) return;
@@ -34,6 +33,7 @@ export default function HomePage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ longUrl, doctorName: doctor, clinicName: clinic }),
     });
+
 
     if (res.ok) {
       const data = await res.json();
@@ -80,28 +80,28 @@ export default function HomePage() {
               ref={divRef}
             >
               <Image
-                src={"/t.png"}
+                src={"/Aquasoft 5 star Final.png"}
                 alt="template"
                 layout="fill"
                 objectFit="cover"
                 priority={true}
               />
-              <p className="top-6 md:top-14 absolute md:text-4xl text-xl font-semibold">
+              <p className="top-6 md:top-11 absolute md:text-4xl text-xl font-semibold">
                 {doctorName || "hello"}
               </p>
-              <p className="bottom-6 md:bottom-14 absolute md:text-4xl text-xl font-semibold">
+              <p className="bottom-6 md:bottom-11 absolute md:text-4xl text-xl font-semibold">
                 {clinicName || "hello"}
               </p>
               <div className="absolute">
                 <QRCodeSVG
                   value={shortUrl}
                   title={doctorName || "Title"}
-                  size={scale < 800 ? 160 : 320}
+                  size={scale < 800 ? 160 : 350}
                   bgColor={"#ffffff"}
                   fgColor={"#000000"}
                   level={"H"}
                   imageSettings={{
-                    src: "https://res.cloudinary.com/db9gdpyyv/image/upload/v1745587816/star_wzre3w.png",
+                    src: "/star.png",
                     x: undefined,
                     y: undefined,
                     height: scale < 800 ? 50 : 70,
@@ -130,12 +130,12 @@ export default function HomePage() {
       ) : (
         <div className="h-full w-full flex flex-col px-2">
           <h2 className="text-center font-semibold text-xl pb-5">Google Sheet Data</h2>
-          <table border={1} className="px-5">
+          <table className="px-5">
             <thead>
               <tr>
                 <th className="border p-2">Sr No</th>
-                <th className="border p-2">Rsm Name</th>
-                <th className="border p-2">Dr.Name</th>
+                <th className="border p-2">RSM Name</th>
+                <th className="border p-2">Dr. Name</th>
                 <th className="border p-2">Place</th>
                 <th className="border p-2">Mobile No.</th>
                 <th className="border p-2">Clinic Name</th>
@@ -155,7 +155,6 @@ export default function HomePage() {
                           (cellIndex > 7 || cellIndex === 2 || cellIndex === 3) && "hidden"
                         }`}
                       >
-                        {" "}
                         <p className="truncate">{cell}</p>
                       </td>
                       {cellIndex === 7 && (

@@ -6,7 +6,6 @@ import prisma from '@/lib/prisma';
 export async function POST(req: NextRequest) {
   const { longUrl,doctorName,clinicName } = await req.json();
 
-  console.log(doctorName,clinicName)
 
   if (!longUrl || typeof longUrl !== 'string') {
     return NextResponse.json({ error: 'Invalid URL' }, { status: 400 });
