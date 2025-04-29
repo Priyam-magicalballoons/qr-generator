@@ -14,6 +14,7 @@ export default function HomePage() {
   const [doctorName, setDoctorName] = useState("");
   const [clinicName, setClinicName] = useState("");
   const [scale, setScale] = useState(800)
+  const [type, setType] = useState<"QR" | "Sticker">("QR")
   const divRef = useRef<HTMLDivElement>(null);
 
   const handleDownload = async () => {
@@ -22,7 +23,7 @@ export default function HomePage() {
     const dataUrl = await toPng(divRef.current);
 
     const link = document.createElement("a");
-    link.download = "div-image.png";
+    link.download = `${doctorName}.png`;
     link.href = dataUrl;
     link.click();
   };
@@ -69,66 +70,129 @@ export default function HomePage() {
       style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}
       className="h-screen"
     >
-      {shortId ? (
-        <div className="relative h-full w-full">
-          <div
-            style={{ marginTop: "2rem" }}
-            className="flex items-center flex-col justify-center "
-          >
+      {(shortId && type === "QR") ? (
+        (
+          <div className="relative h-full w-full">
             <div
-              className="flex items-center relative justify-center w-[300px] h-[300px] md:w-[700px] md:h-[700px]"
-              ref={divRef}
+              style={{ marginTop: "2rem" }}
+              className="flex items-center flex-col justify-center "
             >
-              <Image
-                src={"/Aquasoft 5 star Final.png"}
-                alt="template"
-                layout="fill"
-                objectFit="cover"
-                priority={true}
-              />
-              <p className="top-6 md:top-12 absolute md:text-4xl text-xl font-semibold">
-                {doctorName || "hello"}
-              </p>
-              <p className="bottom-6 md:bottom-12 absolute md:text-4xl text-xl font-semibold">
-                {clinicName || "hello"}
-              </p>
-              <div className="absolute">
-                <QRCodeSVG
-                  value={shortUrl}
-                  title={doctorName || "Title"}
-                  size={scale < 800 ? 175 : 410}
-                  bgColor={"#ffffff"}
-                  fgColor={"#000000"}
-                  level={"H"}
-                  imageSettings={{
-                    src: "/star.png",
-                    x: undefined,
-                    y: undefined,
-                    height: scale < 800 ? 40 : 70,
-                    width: scale < 800 ? 40 : 70,
-                    excavate: true,
-                  }}
+              <div
+                className="flex items-center relative justify-center w-[300px] h-[300px] md:w-[700px] md:h-[700px]"
+                ref={divRef}
+              >
+                <Image
+                  src={"/Aquasoft 5 star Final.png"}
+                  alt="template"
+                  layout="fill"
+                  objectFit="cover"
+                  priority={true}
                 />
+                <p className="top-6 md:top-12 absolute md:text-4xl text-xl font-semibold">
+                  {doctorName || "hello"}
+                </p>
+                <p className="bottom-6 md:bottom-12 absolute md:text-4xl text-xl font-semibold">
+                  {clinicName || "hello"}
+                </p>
+                <div className="absolute">
+                  <QRCodeSVG
+                    value={shortUrl}
+                    title={doctorName || "Title"}
+                    size={scale < 800 ? 175 : 410}
+                    bgColor={"#ffffff"}
+                    fgColor={"#000000"}
+                    level={"H"}
+                    imageSettings={{
+                      src: "/star.png",
+                      x: undefined,
+                      y: undefined,
+                      height: scale < 800 ? 40 : 70,
+                      width: scale < 800 ? 40 : 70,
+                      excavate: true,
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="relative -bottom-5 flex flex-row gap-10">
+                <Button
+                  className="py-2 px-4 rounded-xl bg-red-500 text-white font-semibold cursor-pointer hover:bg-red-700"
+                  onClick={() => setShortId("")}
+                >
+                  Go back
+                </Button>
+                <Button
+                  className="py-2 px-4 rounded-xl bg-green-500 text-white font-semibold cursor-pointer hover:bg-green-700"
+                  onClick={handleDownload}
+                >
+                  Download
+                </Button>
               </div>
             </div>
-            <div className="relative -bottom-5 flex flex-row gap-10">
-              <Button
-                className="py-2 px-4 rounded-xl bg-red-500 text-white font-semibold cursor-pointer hover:bg-red-700"
-                onClick={() => setShortId("")}
+          </div>
+        )
+      ) : shortId && type === "Sticker" ? (
+        (
+          <div className="relative h-full w-full">
+            <div
+              style={{ marginTop: "2rem" }}
+              className="flex items-center flex-col justify-center"
+            >
+              <div
+                className="flex items-center relative justify-center w-[300px] h-[300px] md:w-[700px] md:h-[700px] bg-white"
+                ref={divRef}
               >
-                Go back
-              </Button>
-              <Button
-                className="py-2 px-4 rounded-xl bg-green-500 text-white font-semibold cursor-pointer hover:bg-green-700"
-                onClick={handleDownload}
-              >
-                Download
-              </Button>
+                <Image
+                  src={"/pngimg.com - square_PNG39.png"}
+                  alt="template"
+                  layout="fill"
+                  objectFit="cover"
+                  priority={true}
+                />
+                <p className="top-6 md:top-18 absolute md:text-4xl text-xl font-semibold">
+                  {doctorName || "hello"}
+                </p>
+                <p className="bottom-6 md:bottom-18 absolute md:text-4xl text-xl font-semibold">
+                  {clinicName || "hello"}
+                </p>
+                <div className="absolute">
+                  <QRCodeSVG
+                    value={shortUrl}
+                    title={doctorName || "Title"}
+                    size={scale < 800 ? 175 : 470}
+                    bgColor={"#ffffff"}
+                    fgColor={"#000000"}
+                    level={type === "Sticker" ? "L" : "H"}
+                    imageSettings={{
+                      src: "/star.png",
+                      x: undefined,
+                      y: undefined,
+                      height: scale < 800 ? 40 : 80,
+                      width: scale < 800 ? 40 : 80,
+                      excavate: true,
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="relative -bottom-5 flex flex-row gap-10">
+                <Button
+                  className="py-2 px-4 rounded-xl bg-red-500 text-white font-semibold cursor-pointer hover:bg-red-700"
+                  onClick={() => setShortId("")}
+                >
+                  Go back
+                </Button>
+                <Button
+                  className="py-2 px-4 rounded-xl bg-green-500 text-white font-semibold cursor-pointer hover:bg-green-700"
+                  onClick={handleDownload}
+                >
+                  Download
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      ) : (
-        <div className="h-full w-full flex flex-col px-2">
+        )
+      )
+    : (
+      <div className="h-full w-full flex flex-col px-2">
           <h2 className="text-center font-semibold text-xl pb-5">Google Sheet Data</h2>
           <table className="px-5">
             <thead>
@@ -142,6 +206,8 @@ export default function HomePage() {
                 <th className="border p-2">Google Page Link</th>
                 <th className="border p-2">Review Page Link</th>
                 <th className="border p-2">QR Button</th>
+                <th className="border p-2">
+                  Sticker Button</th>
               </tr>
             </thead>
             <tbody>
@@ -179,9 +245,25 @@ export default function HomePage() {
                               setDoctorName(row[4]),
                                 setClinicName(row[7]),
                                 handleSubmit(row[8], row[4], row[7]);
+                                setType("QR")
                             }}
                           >
                             generate QR Code
+                          </Button>
+                        </td>
+                      )}
+                      {cellIndex === 10 && (
+                        <td className="p-2 border text-center">
+                          <Button
+                            className="rounded-lg bg-green-600 truncate px-3 cursor-pointer hover:bg-green-800"
+                            onClick={(e) => {
+                              setDoctorName(row[4]),
+                                setClinicName(row[7]),
+                                handleSubmit(row[8], row[4], row[7]);
+                                setType("Sticker")
+                            }}
+                          >
+                            generate Sticker
                           </Button>
                         </td>
                       )}
@@ -192,7 +274,8 @@ export default function HomePage() {
             </tbody>
           </table>
         </div>
-      )}
+    )
+    }
     </main>
   );
 }
