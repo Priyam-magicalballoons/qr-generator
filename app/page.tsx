@@ -49,6 +49,7 @@ export default function HomePage() {
 
       const data = (await res.json())
   
+      console.log(data.filePath)
       alert(data.filePath);
 
       window.location.reload()
