@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
     fs.writeFileSync(filePath, base64Data, "base64");
 
-    return new Response("File saved successfully", { status: 200 });
+    return new Response(filePath, { status: 200 });
   } catch (error) {
     console.error(error);
     return new Response("Error saving file", { status: 500 });
