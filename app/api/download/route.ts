@@ -1,8 +1,8 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest,res:NextResponse) {
   try {
     const { base64Image, doctorName, type,RSM,HQ,SO } = await req.json();
 
@@ -34,7 +34,9 @@ export async function POST(req: NextRequest) {
 
     fs.writeFileSync(filePath, base64Data, "base64");
 
-    return new Response(filePath, { status: 200 });
+    return NextResponse.json({
+        filePath
+    })
   } catch (error) {
     console.error(error);
     return new Response("Error saving file", { status: 500 });

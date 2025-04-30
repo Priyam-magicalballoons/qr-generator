@@ -34,7 +34,7 @@ export default function HomePage() {
     try {
       const dataUrl = await toPng(divRef.current);
   
-      await fetch("/api/download", {
+      const res = await fetch("/api/download", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -46,8 +46,10 @@ export default function HomePage() {
           SO : so,
         }),
       });
+
+      const data = (await res.json())
   
-      alert("Image saved to Downloads/public/random!");
+      alert(data.filePath);
 
       window.location.reload()
     } catch (error) {
