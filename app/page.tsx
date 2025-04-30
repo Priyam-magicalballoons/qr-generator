@@ -32,35 +32,38 @@ export default function HomePage() {
     // console.log(divRef.current)
 
     try {
-      const dataUrl = await toPng(divRef.current);
+      const dataUrl = await toPng(divRef.current,{cacheBust : true});
+      
+        const link = document.createElement("a");
+        link.download = `${doctorName}-${type}.png`;
+        link.href = dataUrl;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      
   
-      const res = await fetch("/api/download", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          base64Image: dataUrl,
-          doctorName,
-          type: type === "QR" ? "QR" : "sticker",
-          RSM : rsm,
-          HQ : hq,
-          SO : so,
-        }),
-      });
+      // const res = await fetch("/api/download", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({
+      //     base64Image: dataUrl,
+      //     doctorName,
+      //     type: type === "QR" ? "QR" : "sticker",
+      //     RSM : rsm,
+      //     HQ : hq,
+      //     SO : so,
+      //   }),
+      // });
 
-      const data = (await res.json())
+      // const data = (await res.json())
   
-      console.log(data.filePath)
-      alert(data.filePath);
+      // console.log(data.filePath)
+      // alert(data.filePath);
 
       window.location.reload()
     } catch (error) {
       console.error("Failed to save image:", error);
     }
-
-    // const link = document.createElement("a");
-    // link.download = `${doctorName}-${type === "QR" ? "QR" : "sticker"}.png`;
-    // link.href = dataUrl;
-    // link.click();
   };
 
   const handleSubmit = async (longUrl: string, doctor: string, clinic: string) => {
