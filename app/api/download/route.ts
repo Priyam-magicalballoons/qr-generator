@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 
-export async function POST(req: NextRequest,res:NextResponse) {
+export async function POST(req: NextRequest) {
   try {
     const { base64Image, doctorName, type,RSM,HQ,SO } = await req.json();
 
