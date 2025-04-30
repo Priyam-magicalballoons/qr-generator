@@ -5,6 +5,7 @@ import { QRCodeSVG } from "qrcode.react";
 import React, { useState, useEffect, useRef } from "react";
 import { toPng } from "html-to-image";
 import { Button } from "@/components/ui/button";
+import path from "path"
 
 const GOOGLE_SHEET_ID = "1-yWUzJyKXn-QybvrVk94aiMx_HUOCfulsgyELuuSpMM";
 
@@ -13,19 +14,50 @@ export default function HomePage() {
   const [data, setData] = useState<any[][]>([]);
   const [doctorName, setDoctorName] = useState("");
   const [clinicName, setClinicName] = useState("");
+  const [rsm, setRsm] = useState("");
+  const [hq, setHq] = useState("");
+  const [so, setSo] = useState("");
   const [scale, setScale] = useState(800)
   const [type, setType] = useState<"QR" | "Sticker">("QR")
   const divRef = useRef<HTMLDivElement>(null);
 
+
+  // C:\Users\ACER.DESKTOP-6NN1MUF\Downloads\Ajanta Pharma\QR Code Based Google Review Page\RSM\HQ\SO\Doctor 
+
   const handleDownload = async () => {
     if (!divRef.current) return;
 
-    const dataUrl = await toPng(divRef.current);
+    // const dataUrl = await toPng(divRef.current,{cacheBust : true});
 
-    const link = document.createElement("a");
-    link.download = `${doctorName}.png`;
-    link.href = dataUrl;
-    link.click();
+    // console.log(divRef.current)
+
+    try {
+      const dataUrl = await toPng(divRef.current);
+  
+      await fetch("/api/download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          base64Image: dataUrl,
+          doctorName,
+          type: type === "QR" ? "QR" : "sticker",
+          RSM : rsm,
+          HQ : hq,
+          SO : so,
+        }),
+      });
+  
+      alert("Image saved to Downloads/public/random!");
+
+      window.location.reload()
+    } catch (error) {
+      console.error("Failed to save image:", error);
+    }
+
+    // const link = document.createElement("a");
+    // link.download = `${doctorName}-${type === "QR" ? "QR" : "sticker"}.png`;
+    // link.href = dataUrl;
+    // link.click();
   };
 
   const handleSubmit = async (longUrl: string, doctor: string, clinic: string) => {
@@ -148,17 +180,17 @@ export default function HomePage() {
                   objectFit="cover"
                   priority={true}
                 />
-                <p className="top-6 md:top-18 absolute md:text-4xl text-xl font-semibold">
+                <p className="top-6 md:top-17 right-15.5 absolute md:text-4xl text-xl font-semibold text-center bg-[#e7c85f] w-[82%] px-9.5 ">
                   {doctorName || "hello"}
                 </p>
-                <p className="bottom-6 md:bottom-18 absolute md:text-4xl text-xl font-semibold">
-                  {clinicName || "hello"}
+                <p className="bottom-6 md:bottom-14 text-center right-15.5 absolute md:text-4xl text-xl font-semibold bg-[#e7c85f] w-[82%] px-9.5 ">
+                  {clinicName || "Clinic Name"}
                 </p>
-                <div className="absolute">
+                <div className="absolute mt-3">
                   <QRCodeSVG
                     value={shortUrl}
                     title={doctorName || "Title"}
-                    size={scale < 800 ? 175 : 470}
+                    size={scale < 800 ? 175 : 480}
                     bgColor={"#ffffff"}
                     fgColor={"#000000"}
                     level={type === "Sticker" ? "L" : "H"}
@@ -245,7 +277,10 @@ export default function HomePage() {
                               setDoctorName(row[4]),
                                 setClinicName(row[7]),
                                 handleSubmit(row[8], row[4], row[7]);
-                                setType("QR")
+                                setType("QR");
+                                setRsm(row[1]);
+                                setHq(row[3])
+                                setSo(row[2])
                             }}
                           >
                             generate QR Code
@@ -261,6 +296,9 @@ export default function HomePage() {
                                 setClinicName(row[7]),
                                 handleSubmit(row[8], row[4], row[7]);
                                 setType("Sticker")
+                                setRsm(row[1]);
+                                setHq(row[3])
+                                setSo(row[2])
                             }}
                           >
                             generate Sticker
