@@ -126,10 +126,10 @@ export default function HomePage() {
                   objectFit="cover"
                   priority={true}
                 />
-                <p className="top-6 md:top-12 absolute md:text-4xl text-xl font-semibold">
+                <p className="top-2 md:top-12 absolute md:text-4xl text-xl font-semibold text-center tracking-tighter leading-6 px-3 pt-1 md:pt-0 md:tracking-normal md:leading-10 flex justify-center items-center  max-h-16 h-11">
                   {doctorName || "hello"}
                 </p>
-                <p className="bottom-6 md:bottom-12 absolute md:text-4xl text-xl font-semibold">
+                <p className="bottom-2 md:bottom-12 absolute md:text-4xl text-xl text-center font-semibold tracking-tighter leading-6 md:tracking-normal md:leading-10 h-11 flex justify-center items-center px-3 pb-1 md:pb-0">
                   {clinicName || "hello"}
                 </p>
                 <div className="absolute">
@@ -186,18 +186,19 @@ export default function HomePage() {
                   objectFit="cover"
                   priority={true}
                 />
-                <p className="top-6 md:top-17 right-15.5 absolute md:text-4xl text-xl font-semibold text-center bg-[#e7c85f] w-[82%] px-9.5 ">
+                <p className={`top-7 h-8 md:h-11 md:top-17 text-center md:right-15.5 absolute md:text-[32px] text-lg ${doctorName.length > 22 && "text-sm w-full max-w-[82%] px-1"} ${doctorName.length > 35 && "truncate text-sm w-full max-w-[82%] px-1"} font-semibold bg-[#e7c85f] w-[82%] pt-1 md:pt-0`} >
                   {doctorName || "hello"}
                 </p>
-                <p className="bottom-6 md:bottom-14 text-center right-15.5 absolute md:text-4xl text-xl font-semibold bg-[#e7c85f] w-[82%] px-9.5 ">
+                <p className={`bottom-6 md:h-10 h-7 md:bottom-14 text-center md:right-15.5 absolute md:text-[32px] text-lg font-semibold bg-[#e7c85f] w-[82%] ${clinicName.length > 22 && "text-sm w-full max-w-[82%] px-1 py-1 md:py-0"} ${clinicName.length > 35 && "truncate text-sm w-full max-w-[82%] px-1"}`}>
                   {clinicName || "Clinic Name"}
                 </p>
                 <div className="absolute mt-3">
                   <QRCodeSVG
                     value={shortUrl}
                     title={doctorName || "Title"}
-                    size={scale < 800 ? 175 : 480}
+                    size={scale < 800 ? 185 : 480}
                     bgColor={"#ffffff"}
+                    className="-mt-1 md:-mt-0"
                     fgColor={"#000000"}
                     level={type === "Sticker" ? "L" : "H"}
                     imageSettings={{
