@@ -34,31 +34,31 @@ export default function HomePage() {
     try {
       const dataUrl = await toPng(divRef.current,{cacheBust : true});
       
-        const link = document.createElement("a");
-        link.download = `${doctorName}-${type}.png`;
-        link.href = dataUrl;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        // const link = document.createElement("a");
+        // link.download = `${doctorName}-${type}.png`;
+        // link.href = dataUrl;
+        // document.body.appendChild(link);
+        // link.click();
+        // document.body.removeChild(link);
       
   
-      // const res = await fetch("/api/download", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({
-      //     base64Image: dataUrl,
-      //     doctorName,
-      //     type: type === "QR" ? "QR" : "sticker",
-      //     RSM : rsm,
-      //     HQ : hq,
-      //     SO : so,
-      //   }),
-      // });
+      const res = await fetch("/api/download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          base64Image: dataUrl,
+          doctorName,
+          type: type === "QR" ? "QR" : "sticker",
+          RSM : rsm,
+          HQ : hq,
+          SO : so,
+        }),
+      });
 
-      // const data = (await res.json())
+      const data = (await res.json())
   
-      // console.log(data.filePath)
-      // alert(data.filePath);
+      console.log(data.filePath)
+      alert(data.filePath);
 
       window.location.reload()
     } catch (error) {
@@ -186,13 +186,11 @@ export default function HomePage() {
                   objectFit="cover"
                   priority={true}
                 />
-                <p className={`top-7 h-8 md:h-11 md:top-17 text-center md:right-15.5 absolute md:text-[32px] text-lg ${doctorName.length > 22 && "text-sm w-full max-w-[82%] px-1"} ${doctorName.length > 35 && "truncate text-sm w-full max-w-[82%] px-1"} font-semibold bg-[#e7c85f] w-[82%] pt-1 md:pt-0`} >
+                <p className={`top-7 h-8 md:h-11 md:top-17 text-center md:right-15.5 absolute md:text-[32px] text-lg ${doctorName.length > 22 && "text-sm w-full max-w-[82%] px-1"} ${doctorName.length > 35 && "truncate text-sm w-full max-w-[82%] px-1"} font-semibold  w-[82%] pt-1 md:pt-0`} >
                   {doctorName || "hello"}
                 </p>
-                <p className={`bottom-6 md:h-10 h-7 md:bottom-14 text-center md:right-15.5 absolute md:text-[32px] text-lg font-semibold bg-[#e7c85f] w-[82%] ${clinicName.length > 22 && "text-sm w-full max-w-[82%] px-1 py-1 md:py-0"} ${clinicName.length > 35 && "truncate text-sm w-full max-w-[82%] px-1"}`}>
-                  {clinicName || "Clinic Name"}
-                </p>
-                <div className="absolute mt-3">
+              
+                <div className="absolute mt-5">
                   <QRCodeSVG
                     value={shortUrl}
                     title={doctorName || "Title"}
